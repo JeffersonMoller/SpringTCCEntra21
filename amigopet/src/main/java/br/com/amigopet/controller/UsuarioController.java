@@ -51,7 +51,7 @@ public class UsuarioController {
 	@PostMapping("/cadastrar")
 	@Transactional
 	public ResponseEntity<Object> cadastrar(@RequestBody @Valid Usuario usuario) {
-		boolean existeEmail = usuarioRepository.existsByEmail(usuario.getEmail());;
+		boolean existeEmail = usuarioRepository.existsByEmail(usuario.getEmail());
 		if(!existeEmail) {
 			usuarioRepository.save(usuario);
 			return ResponseEntity.ok(usuario);
@@ -74,8 +74,8 @@ public class UsuarioController {
 	public ResponseEntity<TokenDto> alterar(@PathVariable Long id,
 			@RequestBody @Valid AtualizacaoUsuarioForm form) {
 		
-		form.atualizar(id, usuarioRepository);
-		
+		String mensagem = form.atualizar(id, usuarioRepository);
+		System.out.println(mensagem);
 		
 		UsernamePasswordAuthenticationToken dadosLogin = form.converter();
 		try {

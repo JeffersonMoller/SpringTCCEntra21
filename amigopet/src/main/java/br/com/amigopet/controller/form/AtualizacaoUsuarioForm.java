@@ -44,15 +44,30 @@ public class AtualizacaoUsuarioForm {
 		this.celular = celular;
 	}
 
-	public Usuario atualizar(Long id, UsuarioRepository usuarioRepository) {
+	public String atualizar(Long id, UsuarioRepository usuarioRepository) {
 		Usuario usuario = usuarioRepository.getOne(id);
+		boolean existeEmail = usuarioRepository.existsByEmail(this.email);
+		String mensagem = "";
 
-		usuario.setNome(this.nome);
-		usuario.setEmail(this.email);
-		usuario.setSenha(this.senha);
-		usuario.setCelular(this.celular);
+		if(usuario.getEmail().equals(this.email)) {
+			usuario.setNome(this.nome);
+			usuario.setSenha(this.senha);
+			usuario.setCelular(this.celular);
+			mensagem = "alterado com sucesso";
+		} else if(existeEmail) {
+			usuario.setNome(this.nome);
+			usuario.setSenha(this.senha);
+			usuario.setCelular(this.celular);
+			mensagem = "o email ja existente no banco";
+		} else {
+			usuario.setNome(this.nome);
+			usuario.setEmail(this.email);
+			usuario.setSenha(this.senha);
+			usuario.setCelular(this.celular);
+			mensagem = "não é igual o seu e não tem no banco";
+		}
+		return mensagem;
 
-		return usuario;
 	}
 	
 	public UsernamePasswordAuthenticationToken converter() {
